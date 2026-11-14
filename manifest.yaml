@@ -2,7 +2,6 @@ version: 0.0.3
 type: plugin
 tags:
   - image
-  - document
 author: xifengy
 name: image_toolbox_topleft
 label:
@@ -29,7 +28,7 @@ resource:
       enabled: false
     storage:
       enabled: false
-      size: 0
+      size: 1048576
 plugins:
   tools:
     - provider/image_toolbox_topleft.yaml
