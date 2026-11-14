@@ -6,3 +6,6 @@ __pycache__/
 *.difypkg
 tests/
 *.zip
+
+# Local official CLI executable used by GitHub Actions
+dify-plugin
