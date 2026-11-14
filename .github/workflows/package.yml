@@ -1,0 +1,60 @@
+name: Package and test Dify plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+      - name: Run crop tests
+        run: python -m pytest -q tests
+      - name: Compile Python
+        run: python -m compileall -q main.py provider tools
+      - name: Download official Dify CLI
+        run: |
+          curl -fsSL --retry 3 -o dify-plugin https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.15/dify-plugin-linux-amd64
+          chmod +x dify-plugin
+          ./dify-plugin version
+      - name: Package with Dify CLI
+        run: ./dify-plugin plugin package . -o image_toolbox_topleft-0.0.3.difypkg
+      - name: Inspect package
+        run: |
+          test -s image_toolbox_topleft-0.0.3.difypkg
+          python - <<'PY'
+          import zipfile, yaml
+          path = "image_toolbox_topleft-0.0.3.difypkg"
+          with zipfile.ZipFile(path) as z:
+              names = z.namelist()
+              assert "manifest.yaml" in names
+              assert "tools/image_resize_crop.py" in names
+              assert "LICENSE" in names
+              assert all(not x.endswith(".pyc") and "__pycache__" not in x for x in names)
+              manifest = yaml.safe_load(z.read("manifest.yaml"))
+              assert manifest["author"] == "xifengy"
+              assert manifest["name"] == "image_toolbox_topleft"
+              assert manifest["version"] == "0.0.3"
+          print("Package checks passed")
+          PY
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: image_toolbox_topleft-0.0.3
+          path: image_toolbox_topleft-0.0.3.difypkg
+          if-no-files-found: error
