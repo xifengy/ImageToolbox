@@ -1,0 +1,82 @@
+identity:
+  author: "xifengy"
+  name: "image_resize_crop"
+  label:
+    en_US: "Image Crop (Top Left)"
+    zh_Hans: "图片左上角裁剪"
+description:
+  human:
+    en_US: "Crop from source pixel (0,0) without centering; optional center-fit and output pixel limit."
+    zh_Hans: "从原图(0,0)像素裁剪，支持居中模式及输出像素限制。"
+  llm: "Crop from top-left (0,0) to requested pixel dimensions."
+class_name: ImageResizeCropTool
+parameters:
+  - name: image_file
+    label: {en_US: "Image File", zh_Hans: "图片文件"}
+    type: file
+    required: true
+    form: llm
+    human_description: {en_US: "Source image.", zh_Hans: "输入原图。"}
+    llm_description: "Source raster image."
+  - name: preset_size
+    label: {en_US: "Preset Size", zh_Hans: "预设尺寸"}
+    type: select
+    required: false
+    default: "none"
+    form: llm
+    human_description: {en_US: "Select none for custom crop.", zh_Hans: "自定义尺寸请选择无。"}
+    llm_description: "Preset dimensions."
+    options:
+      - label: {en_US: "None", zh_Hans: "无"}
+        value: "none"
+      - label: {en_US: "1 Inch", zh_Hans: "1寸"}
+        value: "1_inch"
+      - label: {en_US: "Large 1 Inch", zh_Hans: "大1寸"}
+        value: "1_inch_large"
+      - label: {en_US: "2 Inch", zh_Hans: "2寸"}
+        value: "2_inch"
+      - label: {en_US: "Small 2 Inch", zh_Hans: "小2寸"}
+        value: "2_inch_small"
+  - name: custom_width
+    label: {en_US: "Custom Width", zh_Hans: "自定义宽度"}
+    type: number
+    required: false
+    default: 0
+    min: 1
+    form: llm
+    human_description: {en_US: "Width in pixels.", zh_Hans: "裁剪宽度（像素）。"}
+    llm_description: "Target width in pixels."
+  - name: custom_height
+    label: {en_US: "Custom Height", zh_Hans: "自定义高度"}
+    type: number
+    required: false
+    default: 0
+    min: 1
+    form: llm
+    human_description: {en_US: "Height in pixels.", zh_Hans: "裁剪高度（像素）。"}
+    llm_description: "Target height in pixels."
+  - name: crop_anchor
+    label: {en_US: "Crop Anchor", zh_Hans: "裁剪起点"}
+    type: select
+    required: false
+    default: "top_left"
+    form: llm
+    human_description: {en_US: "Top Left starts at (0,0); Center scales to cover.", zh_Hans: "左上角从(0,0)裁剪；居中则使用原cover模式。"}
+    llm_description: "top_left or center"
+    options:
+      - label: {en_US: "Top Left (0,0)", zh_Hans: "左上角(0,0)"}
+        value: "top_left"
+      - label: {en_US: "Center (legacy)", zh_Hans: "居中（原版）"}
+        value: "center"
+  - name: max_pixels
+    label: {en_US: "Maximum Output Pixels", zh_Hans: "输出最大像素数"}
+    type: number
+    required: false
+    default: 36000000
+    min: 1
+    form: llm
+    human_description: {en_US: "Downscale cropped output when over limit; hard cap 36MP.", zh_Hans: "裁剪后若超限则等比缩放，最高3600万像素。"}
+    llm_description: "Output pixel cap, default 36000000."
+extra:
+  python:
+    source: tools/image_resize_crop.py
