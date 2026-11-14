@@ -1,0 +1,15 @@
+identity:
+  author: "xifengy"
+  name: "image_toolbox_topleft"
+  label:
+    en_US: "Image Toolbox - Top Left Crop"
+    zh_Hans: "图片处理工具 - 左上角裁剪"
+  description:
+    en_US: "Pixel-accurate top-left crop; no centering by default."
+    zh_Hans: "从左上角像素(0,0)裁剪，默认不居中。"
+  icon: "icon.svg"
+tools:
+  - tools/image_resize_crop.yaml
+extra:
+  python:
+    source: provider/image_toolbox_topleft.py
