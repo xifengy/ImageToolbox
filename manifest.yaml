@@ -1,0 +1,49 @@
+version: 0.0.3
+type: plugin
+tags:
+  - image
+  - document
+author: xifengy
+name: image_toolbox_topleft
+label:
+  en_US: Image Toolbox - Top Left Crop
+  zh_Hans: 图片处理工具 - 左上角裁剪
+description:
+  en_US: Pixel-accurate top-left image crop for OCR and scanned documents, with optional center-fit and 36MP output guard.
+  zh_Hans: 针对扫描文件与OCR的左上角像素裁剪，支持可选居中模式及3600万像素输出限制。
+icon: icon.svg
+resource:
+  memory: 536870912
+  permission:
+    model:
+      enabled: false
+      llm: false
+      text_embedding: false
+      rerank: false
+      tts: false
+      speech2text: false
+      moderation: false
+    endpoint:
+      enabled: false
+    app:
+      enabled: false
+    storage:
+      enabled: false
+      size: 0
+plugins:
+  tools:
+    - provider/image_toolbox_topleft.yaml
+meta:
+  version: 0.0.2
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: null
+created_at: 2026-11-14T00:00:00Z
+privacy: PRIVACY.md
+repo: https://github.com/xifengy/ImageToolbox
+verified: false
