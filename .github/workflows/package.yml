@@ -29,11 +29,11 @@ jobs:
         run: python -m compileall -q main.py provider tools
       - name: Download official Dify CLI
         run: |
-          curl -fsSL --retry 3 -o dify-plugin https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.15/dify-plugin-linux-amd64
-          chmod +x dify-plugin
-          ./dify-plugin version
+          curl -fsSL --retry 3 -o /tmp/dify-plugin https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.15/dify-plugin-linux-amd64
+          chmod +x /tmp/dify-plugin
+          /tmp/dify-plugin version
       - name: Package with Dify CLI
-        run: ./dify-plugin plugin package . -o image_toolbox_topleft-0.0.3.difypkg
+        run: /tmp/dify-plugin plugin package . -o image_toolbox_topleft-0.0.3.difypkg
       - name: Inspect package
         run: |
           test -s image_toolbox_topleft-0.0.3.difypkg
